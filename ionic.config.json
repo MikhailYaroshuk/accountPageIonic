@@ -1,0 +1,7 @@
+{
+  "name": "accountPageIonic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
