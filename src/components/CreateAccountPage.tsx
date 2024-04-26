@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import {
-  IonPage, IonContent, IonInput, IonButton, IonIcon,
+import { IonPage, IonContent, IonButton, IonIcon,
   IonLabel, IonCheckbox, IonText
 } from '@ionic/react';
 import { eye, eyeOff } from 'ionicons/icons';
@@ -30,13 +29,12 @@ const CreateAccountPage = () => {
   });
 
   const handleDobFocus = (e: { target: { value: string; }; }) => {
-    e.target.value=''
-    setDobInputType('date'); // Switch to date type on focus
+    setDobInputType('date');
   };
 
   const handleDobBlur = (e: { target: { value: any; }; }) => {
     if (!e.target.value) {
-      setDobInputType('text'); // Switch back to text type if no date is selected
+      setDobInputType('text');
     }
   };
 
