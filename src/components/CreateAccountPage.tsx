@@ -198,7 +198,7 @@ const CreateAccountPage = () => {
                 {errors.terms && <p className="text-sm text-red-500">{errors.terms}</p>}
               </IonLabel>
             </div>
-            <IonButton expand="block" type="submit" className="mt-[92px]" disabled={!isFormValid()}>Create Account</IonButton>
+            <IonButton expand="block" type="submit" className="m-0 mt-[92px] text-base h-12 rounded-lg normal-case" disabled={!isFormValid()}>Create Account</IonButton>
           </form>
         </div>
       </IonContent>
