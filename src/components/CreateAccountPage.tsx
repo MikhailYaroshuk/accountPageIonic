@@ -18,7 +18,6 @@ const CreateAccountPage = () => {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [dobValue, setDobValue] = useState('');
   const [dobInputType, setDobInputType] = useState('text');
   const [formData, setFormData] = useState({
     username: '',
