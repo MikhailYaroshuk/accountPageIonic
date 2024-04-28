@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { IonPage, IonContent, IonButton, IonIcon,
-  IonLabel, IonCheckbox, IonText
+import {
+  IonPage, IonContent, IonButton, IonIcon,
+  IonLabel, IonCheckbox, IonText,
+  IonDatetime,
 } from '@ionic/react';
 import { eye, eyeOff } from 'ionicons/icons';
 
-
 const CreateAccountPage = () => {
-
   const [errors, setErrors] = useState({
     username: '',
     dateOfBirth: '',
@@ -18,7 +18,7 @@ const CreateAccountPage = () => {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [dobInputType, setDobInputType] = useState('text');
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const [formData, setFormData] = useState({
     username: '',
     dateOfBirth: '',
@@ -27,32 +27,26 @@ const CreateAccountPage = () => {
     confirmPassword: '',
   });
 
-  const handleDobFocus = (e: { target: { value: string; }; }) => {
-    setDobInputType('date');
-  };
-
-  const handleDobBlur = (e: { target: { value: any; }; }) => {
-    if (!e.target.value) {
-      setDobInputType('text');
-    }
+  const handleDateChange = (event: CustomEvent) => {
+    const newDate = event.detail.value;
+    setFormData({ ...formData, dateOfBirth: newDate });
+    validateDateOfBirth(newDate);
   };
 
   const validateDateOfBirth = (dateString: string) => {
     const selectedDate = new Date(dateString);
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-
     selectedDate > currentDate
-    ? setErrors({ ...errors, dateOfBirth: 'Date of birth cannot be in the future.' })
-    : setErrors({ ...errors, dateOfBirth: '' });
+      ? setErrors({ ...errors, dateOfBirth: 'Date of birth cannot be in the future.' })
+      : setErrors({ ...errors, dateOfBirth: '' });
   };
 
   const validateField = (name: string, value: string) => {
     let fieldErrors = { ...errors };
-    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  
+
     switch (name) {
       case 'username':
         fieldErrors.username = value.length <= 3 && value.length !== 0 ? 'Username must be greater than 3 characters.' : '';
@@ -69,17 +63,14 @@ const CreateAccountPage = () => {
       default:
         break;
     }
-  
     setErrors(fieldErrors);
   };
 
   const handleInputChange = (e: { target: { name: string; value: string; }; }) => {
     const { name, value } = e.target;
-  
     setFormData({ ...formData, [name]: value });
     name === 'dateOfBirth' ? validateDateOfBirth(value) : validateField(name, value);
   };
-  
 
   const isFormValid = () => {
     return (
@@ -123,15 +114,20 @@ const CreateAccountPage = () => {
             <div className="mb-6">
               <label className="block mb-2">Date of birth</label>
               <input
-                type={dobInputType}
-                name="dateOfBirth"
+                readOnly
                 required
-                placeholder={dobInputType === 'text' ? 'DD / MM / YYYY' : undefined}
+                name="dateOfBirth"
+                value={formData.dateOfBirth ? new Date(formData.dateOfBirth).toLocaleDateString('en-GB') : ''}
+                placeholder="DD / MM / YYYY"
+                onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
                 className="w-full border border-[#C2C3C4] rounded-lg px-4 py-3 bg-white focus:border-blue-500 focus:outline-none"
+              />
+              <IonDatetime
                 value={formData.dateOfBirth}
-                onChange={handleInputChange}
-                onFocus={handleDobFocus}
-                onBlur={handleDobBlur}
+                onIonChange={handleDateChange}
+                onBlur={() => setIsDatePickerOpen(false)}
+                hidden={!isDatePickerOpen}
+                presentation="date"
               />
               {errors.dateOfBirth && <p className="text-sm text-red-500">{errors.dateOfBirth}</p>}
             </div>
@@ -204,4 +200,3 @@ const CreateAccountPage = () => {
 };
 
 export default CreateAccountPage;
-
